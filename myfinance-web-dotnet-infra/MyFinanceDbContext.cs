@@ -9,6 +9,6 @@ public class MyFinanceDbContext : DbContext
     public DbSet<Transacao> Transacao { get; set; }
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseSqlServer(@"Server=LOCALHOST\SQLEXPRESS;Database=myfinance;Trusted_Connection=True;");
+        optionsBuilder.UseSqlServer(@"Server=192.168.0.102\SQLEXPRESS;Database=myfinance;User Id=vinicius;Password=20201101;TrustServerCertificate=True;");
     }
 }
