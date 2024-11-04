@@ -11,4 +11,16 @@ public class MyFinanceDbContext : DbContext
     {
         optionsBuilder.UseSqlServer(@"Server=192.168.0.102\SQLEXPRESS;Database=myfinance;User Id=vinicius;Password=20201101;TrustServerCertificate=True;");
     }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Transacao>()
+            .Property(t => t.Id_Plano_Conta)
+            .HasColumnName("id_plano_conta");
+
+        modelBuilder.Entity<Transacao>()
+        .HasOne(t => t.PlanoConta)
+        .WithMany()
+        .HasForeignKey(t => t.Id_Plano_Conta);
+    }
 }
