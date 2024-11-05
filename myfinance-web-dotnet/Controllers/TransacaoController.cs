@@ -1,5 +1,6 @@
 
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using myfinance_web_dotnet.Models;
 using myfinance_web_dotnet_domain.Entities;
 using myfinance_web_dotnet_service.Interfaces;
@@ -11,11 +12,13 @@ namespace myfinance_web_dotnet.Controllers
     {
         private readonly ILogger<TransacaoController> _logger;
         private readonly ITransacaoService _transacaoService;
+        private readonly IPlanoContaService _planoContaService;
 
-        public TransacaoController(ILogger<TransacaoController> logger, ITransacaoService transacaoService)
+        public TransacaoController(ILogger<TransacaoController> logger, ITransacaoService transacaoService, IPlanoContaService planoContaService)
         {
             _logger = logger;
             _transacaoService = transacaoService;
+            _planoContaService = planoContaService;
         }
 
         [HttpGet]
@@ -49,20 +52,24 @@ namespace myfinance_web_dotnet.Controllers
         [Route("Cadastrar/{Id}")]
         public IActionResult Cadastrar(int? id)
         {
+            var ListaPlanoContas = new SelectList(_planoContaService.ListarRegistros(), "Id", "Descricao");
+            var itemTransacao = new TransacaoModel() {
+                Data = DateTime.Now,
+                ListaPlanoContas = ListaPlanoContas
+            };
+
             if (id != null)
             {
                 var transacao = _transacaoService.RetornarRegistro((int)id);
-                var transacaoModel = new TransacaoModel() {
-                    Id = transacao.Id,
-                    Historico = transacao.Historico,
-                    Data = transacao.Data,
-                    Valor = transacao.Valor,
-                    Id_Plano_Conta = transacao.Id_Plano_Conta
-                };
+                
+                itemTransacao.Id = transacao.Id;
+                itemTransacao.Historico = transacao.Historico;
+                itemTransacao.Valor = transacao.Valor;
+                itemTransacao.Data = transacao.Data;
+                itemTransacao.Id_Plano_Conta = transacao.Id_Plano_Conta;
 
-                return View(transacaoModel);
             }
-            return View();
+            return View(itemTransacao);
         }
 
         [HttpPost]
