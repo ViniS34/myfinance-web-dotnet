@@ -398,4 +398,4 @@ FodyWeavers.xsd
 *.sln.iml
 
 myfinance-web-dotnet/appsettings.Development.json
-myfinance-web-dotnet/appsettings.Production
+myfinance-web-dotnet/appsettings.Production.json
