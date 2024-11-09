@@ -396,3 +396,6 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+myfinance-web-dotnet/appsettings.Development.json
+myfinance-web-dotnet/appsettings.Production
