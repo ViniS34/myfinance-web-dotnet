@@ -1,49 +1,36 @@
-using Microsoft.EntityFrameworkCore;
 using myfinance_web_dotnet_domain.Entities;
-using myfinance_web_dotnet_infra;
+using myfinance_web_dotnet_infra.Interfaces.Base;
 using myfinance_web_dotnet_service.Interfaces;
 
 namespace myfinance_web_dotnet_service
 {
     public class PlanoContaService : IPlanoContaService
     {
-        private readonly MyFinanceDbContext _dbContext;
+        private readonly IPlanoContaRepository _planoContaRepository;
 
-        public PlanoContaService(MyFinanceDbContext dbContext)
+        public PlanoContaService(IPlanoContaRepository planoContaRepository) 
         {
-            _dbContext = dbContext;
+            _planoContaRepository = planoContaRepository;
         }
+
         public void Cadastrar(PlanoConta Entidade)
         {
-            var dbSet = _dbContext.PlanoConta;
-
-            if (Entidade.Id == null)
-            {
-                dbSet.Add(Entidade);
-            } else {
-                dbSet.Attach(Entidade);
-                _dbContext.Entry(Entidade).State = EntityState.Modified;
-            }
-            _dbContext.SaveChanges();
+            _planoContaRepository.Cadastrar(Entidade);
         }
 
         public void Excluir(int Id)
         {
-            var PlanoConta = new PlanoConta() { Id = Id };
-            _dbContext.Attach(PlanoConta);
-            _dbContext.Remove(PlanoConta);
-            _dbContext.SaveChanges();
+            _planoContaRepository.Excluir(Id);
         }
 
         public List<PlanoConta> ListarRegistros()
         {
-            var dbSet = _dbContext.PlanoConta;
-            return dbSet.ToList();
+            return _planoContaRepository.ListarRegistros();
         }
 
         public PlanoConta RetornarRegistro(int Id)
         {
-            return _dbContext.PlanoConta.Where(x => x.Id == Id).First();
+            return _planoContaRepository.RetornarRegistro(Id);
         }
     }
 }
